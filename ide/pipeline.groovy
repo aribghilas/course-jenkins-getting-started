@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh './mvnw clean compile'
+                sh './mvnw clean package'
                 //sh 'false' // true
             }
             post {
@@ -17,15 +17,23 @@ pipeline {
                     junit '**/target/surefire-reports/TEST-*.xml'
                     archiveArtifacts 'target/*.jar'
                 }
+            }
+        }
+        stage('Notification') {
+              steps {
+                sh 'true' // true
+            }
+            post {
                 changed {
                     emailext subject: "Job \'${JOB_NAME}\' (build ${BUILD_NUMBER}) ${currentBuild.result}",
                         body: "Please go to ${BUILD_URL} and verify the build", 
                         attachLog: true, 
                         compressLog: true, 
-                        to: "test@jenkins",
+                        to: "someone@example.com",
                         recipientProviders: [upstreamDevelopers(), requestor()]
                 }
             }
         }
+
     }
 }
