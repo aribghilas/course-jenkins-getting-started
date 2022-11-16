@@ -4,15 +4,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/g0t4/jgsu-spring-petclinic.git', branch: 'main'
+                git url: 'https://github.com/aribghilas/jgsu-spring-petclinic.git', branch: 'main'
             }            
         }
         stage('Build') {
             steps {
-                sh './mvnw clean package'
+                sh './mvnw clean compile'
                 //sh 'false' // true
             }
-        
             post {
                 always {
                     junit '**/target/surefire-reports/TEST-*.xml'
